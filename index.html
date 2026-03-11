@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VFORCE – Feel the Next Frontier of Gaming</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple: #7B2FFF;
+      --purple-bright: #9B4DFF;
+      --purple-dim: #3d1a7a;
+      --purple-glow: rgba(123,47,255,0.35);
+      --bg: #080810;
+      --bg2: #0d0d1a;
+      --text: #e8e8f0;
+      --muted: #6a6a8a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      position: relative;
+      background:
+        radial-gradient(circle at 50% 36%, rgba(120, 56, 255, 0.18) 0%, rgba(120, 56, 255, 0.08) 15%, transparent 30%),
+        radial-gradient(circle at 50% 88%, rgba(42, 14, 92, 0.22) 0%, transparent 28%),
+        linear-gradient(180deg, #010105 0%, #04040b 100%);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ── DOT GRID BACKGROUND ── */
+    .dot-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image: radial-gradient(circle, rgba(126, 72, 255, 0.7) 0 1.6px, transparent 1.8px);
+      background-size: 42px 42px;
+      opacity: 0.24;
+      pointer-events: none;
+    }
+
+    .dot-grid::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 56% 38% at 50% 43%, transparent 0%, rgba(1,1,5,0.14) 52%, rgba(1,1,5,0.92) 100%),
+        linear-gradient(180deg, rgba(1,1,5,0.1) 0%, rgba(1,1,5,0.82) 100%);
+    }
+
+    .pattern-clusters {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle-field {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      opacity: 0.95;
+    }
+
+    .cluster {
+      position: absolute;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background-image: radial-gradient(circle, rgba(127, 73, 255, 0.92) 0 3px, transparent 3.35px);
+      background-size: 19px 19px;
+      background-position: center;
+      opacity: 0.9;
+      filter: drop-shadow(0 0 24px rgba(110, 46, 255, 0.18));
+      overflow: hidden;
+      mask-image:
+        radial-gradient(circle at center,
+          transparent 0 12%,
+          #000 13% 26%,
+          transparent 27% 34%,
+          #000 35% 48%,
+          transparent 49% 56%,
+          #000 57% 70%,
+          transparent 71% 78%,
+          #000 79% 92%,
+          transparent 93%);
+      -webkit-mask-image:
+        radial-gradient(circle at center,
+          transparent 0 12%,
+          #000 13% 26%,
+          transparent 27% 34%,
+          #000 35% 48%,
+          transparent 49% 56%,
+          #000 57% 70%,
+          transparent 71% 78%,
+          #000 79% 92%,
+          transparent 93%);
+    }
+
+    .cluster-tl {
+      top: -30px;
+      left: -42px;
+      width: min(30vw, 420px);
+      transform: rotate(-18deg);
+    }
+
+    .cluster-tc {
+      top: 12px;
+      left: 50%;
+      width: min(18vw, 240px);
+      transform: translateX(-50%) rotate(8deg);
+    }
+
+    .cluster-tr {
+      top: -18px;
+      right: -16px;
+      width: min(31vw, 430px);
+      transform: rotate(18deg);
+    }
+
+    .cluster-ml {
+      top: 56%;
+      left: 13%;
+      width: min(28vw, 360px);
+      transform: translate(-50%, -50%) rotate(-16deg);
+    }
+
+    .cluster-br {
+      right: -42px;
+      bottom: -34px;
+      width: min(35vw, 500px);
+      transform: rotate(20deg);
+    }
+
+    .cluster-bc {
+      left: 46%;
+      bottom: -80px;
+      width: min(23vw, 300px);
+      transform: translateX(-50%) rotate(12deg);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 34px 0 0;
+      background: none;
+    }
+
+    .nav-logo {
+      display: inline-flex;
+      align-items: center;
+      height: 54px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      display: block;
+      height: 100%;
+      width: auto;
+      filter: drop-shadow(0 0 14px rgba(123,47,255,0.4));
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: white; }
+
+    .nav-cta {
+      background: transparent;
+      border: 1px solid var(--purple);
+      color: var(--purple-bright);
+      padding: 8px 22px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.25s;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+    .nav-cta:hover {
+      background: var(--purple);
+      color: white;
+      box-shadow: 0 0 20px var(--purple-glow);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 150px 24px 140px;
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: min(760px, 88vw);
+      height: min(430px, 54vw);
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(110,40,240,0.24) 0%, rgba(110,40,240,0.1) 38%, transparent 72%);
+      pointer-events: none;
+      top: 44%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      filter: blur(10px);
+    }
+
+    .vforce-logo-wrap {
+      position: relative;
+      margin-bottom: 34px;
+      animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    /* Primary VFORCE logo */
+    .logo-svg {
+      display: block;
+      width: min(430px, 76vw);
+      height: auto;
+      filter: drop-shadow(0 0 26px rgba(255,255,255,0.08)) drop-shadow(0 0 22px rgba(131, 70, 255, 0.12));
+    }
+
+    .tagline {
+      max-width: 720px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: clamp(0.95rem, 1.55vw, 1.28rem);
+      letter-spacing: 0.08em;
+      line-height: 1.4;
+      color: rgba(255,255,255,0.92);
+      text-transform: uppercase;
+      margin-bottom: 42px;
+      text-shadow: 0 0 18px rgba(255,255,255,0.06);
+      animation: fadeUp 0.9s 0.15s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    /* ── JOIN WAITLIST BUTTON ── */
+    .waitlist-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 228px;
+      background: linear-gradient(135deg, #6d29ff 0%, #8a48ff 100%);
+      color: white;
+      padding: 16px 34px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.98rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      border: 1px solid rgba(173, 113, 255, 0.95);
+      cursor: pointer;
+      clip-path: polygon(18px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 18px), calc(100% - 18px) 100%, 16px 100%, 0 calc(100% - 14px), 0 18px);
+      transition: all 0.25s;
+      animation: fadeUp 0.9s 0.3s cubic-bezier(0.16,1,0.3,1) both;
+      text-decoration: none;
+      box-shadow: 0 0 0 1px rgba(123,47,255,0.15), 0 0 26px rgba(123,47,255,0.3);
+      overflow: visible;
+    }
+
+    .waitlist-btn::before {
+      content: '';
+      position: absolute;
+      inset: -7px;
+      border: 1px solid rgba(156, 92, 255, 0.72);
+      clip-path: polygon(22px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 22px), calc(100% - 22px) 100%, 10px 100%, 0 calc(100% - 10px), 0 22px);
+    }
+
+    .waitlist-btn::after {
+      content: '';
+      position: absolute;
+      left: 24px;
+      right: 18px;
+      bottom: -7px;
+      height: 6px;
+      border-left: 1px solid rgba(156, 92, 255, 0.85);
+      border-right: 1px solid rgba(156, 92, 255, 0.85);
+      border-bottom: 1px solid rgba(156, 92, 255, 0.85);
+    }
+
+    .waitlist-btn:hover {
+      background: linear-gradient(135deg, #7f39ff 0%, #9b5cff 100%);
+      box-shadow: 0 0 34px rgba(123,47,255,0.45), 0 0 76px rgba(123,47,255,0.14);
+      transform: translateY(-2px);
+    }
+
+    .waitlist-btn:hover::after {
+      border-color: rgba(193, 146, 255, 0.95);
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(4,4,12,0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--bg2);
+      border: 1px solid rgba(123,47,255,0.3);
+      padding: 52px 48px;
+      width: min(500px, 92vw);
+      position: relative;
+      clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+      box-shadow: 0 0 60px rgba(80,20,180,0.25), inset 0 0 60px rgba(80,20,180,0.04);
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .modal-overlay.active .modal {
+      transform: translateY(0) scale(1);
+    }
+
+    /* Corner decoration */
+    .modal::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 20px; height: 20px;
+      border-top: 2px solid var(--purple);
+      border-right: 2px solid var(--purple);
+    }
+    .modal::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 20px; height: 20px;
+      border-bottom: 2px solid var(--purple);
+      border-left: 2px solid var(--purple);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 20px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    .modal-close:hover { color: white; }
+
+    .modal h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 2rem;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .modal h2 span { color: var(--purple-bright); }
+
+    .modal p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .form-group input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(123,47,255,0.25);
+      color: white;
+      padding: 12px 16px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+    }
+
+    .form-group input::placeholder { color: rgba(255,255,255,0.2); }
+
+    .form-group input:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 16px rgba(123,47,255,0.2);
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: var(--purple);
+      color: white;
+      border: none;
+      padding: 15px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+      transition: all 0.25s;
+      margin-top: 8px;
+    }
+
+    .submit-btn:hover {
+      background: var(--purple-bright);
+      box-shadow: 0 0 30px rgba(123,47,255,0.5);
+    }
+
+    /* ── SUCCESS STATE ── */
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .success-msg .check {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+
+    .success-msg h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+
+    .success-msg h3 span { color: var(--purple-bright); }
+
+    .success-msg p { color: var(--muted); font-size: 0.9rem; }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      gap: 80px;
+      padding: 48px 24px;
+      border-top: 1px solid rgba(123,47,255,0.12);
+      margin-top: 24px;
+      animation: fadeUp 0.9s 0.5s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-val {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 2.2rem;
+      color: white;
+      letter-spacing: 0.02em;
+    }
+
+    .stat-val span { color: var(--purple-bright); }
+
+    .stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      max-width: 1100px;
+      margin: 60px auto 80px;
+      padding: 0 24px;
+      background: rgba(123,47,255,0.08);
+      border: 1px solid rgba(123,47,255,0.12);
+    }
+
+    .feature {
+      background: var(--bg);
+      padding: 40px 32px;
+      transition: background 0.3s;
+    }
+
+    .feature:hover { background: rgba(123,47,255,0.06); }
+
+    .feature-icon {
+      font-size: 1.6rem;
+      margin-bottom: 16px;
+    }
+
+    .feature h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .feature p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 40px 24px 32px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.92);
+      text-transform: uppercase;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+
+    .hero-glow { animation: pulse-glow 4s ease-in-out infinite; }
+
+    /* Scanline effect on modal */
+    @keyframes scanlines {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 100%; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding-top: 28px; }
+      .nav-links { display: none; }
+      .nav-logo { height: 42px; }
+      .cluster {
+        background-size: 15px 15px;
+        background-image: radial-gradient(circle, rgba(127, 73, 255, 0.86) 0 2.3px, transparent 2.6px);
+      }
+      .cluster-tl,
+      .cluster-tr { width: 250px; }
+      .cluster-tc { width: 160px; top: 36px; }
+      .cluster-ml { width: 210px; left: 10%; top: 60%; }
+      .cluster-br { width: 280px; }
+      .cluster-bc { width: 190px; bottom: -36px; }
+      .hero { padding: 132px 24px 110px; }
+      .logo-svg { width: min(330px, 86vw); }
+      .tagline {
+        max-width: 320px;
+        font-size: 0.88rem;
+        letter-spacing: 0.12em;
+        line-height: 1.55;
+        margin-bottom: 34px;
+      }
+      .waitlist-btn {
+        min-width: 206px;
+        padding: 15px 26px;
+        font-size: 0.92rem;
+      }
+      .stats-strip { gap: 32px; flex-wrap: wrap; }
+      .features { grid-template-columns: 1fr; }
+      .modal { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dot-grid"></div>
+  <canvas class="particle-field" id="particleField" aria-hidden="true"></canvas>
+  <div class="pattern-clusters" aria-hidden="true">
+    <span class="cluster cluster-tl"></span>
+    <span class="cluster cluster-tc"></span>
+    <span class="cluster cluster-tr"></span>
+    <span class="cluster cluster-ml"></span>
+    <span class="cluster cluster-br"></span>
+    <span class="cluster cluster-bc"></span>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#hero" aria-label="VFORCE home"><img src="assets/vforce-logo-vm.png" alt="VFORCE logo" /></a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-glow"></div>
+
+    <div class="vforce-logo-wrap">
+      <img class="logo-svg" src="assets/vforce-logo.png" alt="VFORCE logo" />
+    </div>
+
+    <p class="tagline">Feel the Next Frontier of Gaming</p>
+
+    <button class="waitlist-btn" onclick="openModal()">Join Waitlist</button>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>© 2026 VMotion – VFORCE. All rights reserved.</footer>
+
+  <!-- WAITLIST MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+    <div class="modal" id="modal">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+
+      <div id="formContent">
+        <h2>Join the <span>Waitlist</span></h2>
+        <p>Be first to experience VFORCE when we launch. We'll reach out with early access details and exclusive updates.</p>
+
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="nameInput" placeholder="Enter your name" />
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="emailInput" placeholder="you@example.com" />
+        </div>
+
+        <button class="submit-btn" onclick="submitForm()">Secure My Spot</button>
+      </div>
+
+      <div class="success-msg" id="successMsg">
+        <div class="check">✦</div>
+        <h3>You're <span>In</span>.</h3>
+        <p>You've been added to the VFORCE waitlist. We'll be in touch soon with your early access details.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openModal() {
+      document.getElementById('modalOverlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function handleOverlayClick(e) {
+      if (e.target === document.getElementById('modalOverlay')) closeModal();
+    }
+
+    // ── PASTE YOUR GOOGLE APPS SCRIPT URL HERE ──
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyAcF58k5KczEmRFmYljt02qq6HiDPTB3_3SN4562rgHsC_Rv-EdZHdvhWlUoIN4YTn/exec';
+
+    async function submitForm() {
+      const name = document.getElementById('nameInput').value.trim();
+      const email = document.getElementById('emailInput').value.trim();
+      const btn = document.querySelector('.submit-btn');
+
+      if (!name) { shake('nameInput'); return; }
+      if (!email || !email.includes('@')) { shake('emailInput'); return; }
+
+      // Loading state
+      btn.textContent = 'Submitting...';
+      btn.disabled = true;
+      btn.style.opacity = '0.7';
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, timestamp: new Date().toLocaleString() })
+        });
+      } catch (err) {
+        console.warn('Submission note:', err);
+      }
+
+      btn.textContent = 'Secure My Spot';
+      btn.disabled = false;
+      btn.style.opacity = '';
+
+      document.getElementById('formContent').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+
+      setTimeout(() => {
+        closeModal();
+        setTimeout(() => {
+          document.getElementById('formContent').style.display = 'block';
+          document.getElementById('successMsg').style.display = 'none';
+          document.getElementById('nameInput').value = '';
+          document.getElementById('emailInput').value = '';
+        }, 400);
+      }, 3000);
+    }
+
+    function shake(id) {
+      const el = document.getElementById(id);
+      el.style.animation = 'none';
+      el.style.borderColor = '#ff4466';
+      el.style.boxShadow = '0 0 12px rgba(255,40,80,0.3)';
+      setTimeout(() => {
+        el.style.borderColor = '';
+        el.style.boxShadow = '';
+      }, 800);
+      el.focus();
+    }
+
+    // ESC to close
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    (function initParticleField() {
+      const canvas = document.getElementById('particleField');
+      if (!canvas) return;
+
+      const ctx = canvas.getContext('2d');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const pointer = {
+        x: window.innerWidth * 0.5,
+        y: window.innerHeight * 0.5,
+        active: false
+      };
+      const state = {
+        width: 0,
+        height: 0,
+        dpr: Math.min(window.devicePixelRatio || 1, 2),
+        spacing: 34,
+        dots: [],
+        waves: [],
+        rafId: 0,
+        lastWaveAt: 0
+      };
+
+      function buildDots() {
+        state.spacing = window.innerWidth < 768 ? 28 : 34;
+        state.dots = [];
+
+        for (let y = state.spacing * 0.5; y < state.height; y += state.spacing) {
+          for (let x = state.spacing * 0.5; x < state.width; x += state.spacing) {
+            state.dots.push({
+              x,
+              y,
+              phase: Math.random() * Math.PI * 2,
+              twinkle: 0.6 + Math.random() * 1.4,
+              weight: 0.35 + Math.random() * 0.85
+            });
+          }
+        }
+      }
+
+      function resizeCanvas() {
+        state.width = window.innerWidth;
+        state.height = window.innerHeight;
+        state.dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        canvas.width = Math.round(state.width * state.dpr);
+        canvas.height = Math.round(state.height * state.dpr);
+        canvas.style.width = state.width + 'px';
+        canvas.style.height = state.height + 'px';
+
+        ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
+        buildDots();
+      }
+
+      function addWave(x, y, power) {
+        state.waves.push({
+          x,
+          y,
+          radius: 10,
+          life: 0,
+          power,
+          spin: Math.random() > 0.5 ? 1 : -1
+        });
+
+        if (state.waves.length > 9) state.waves.shift();
+      }
+
+      function handlePointerMove(clientX, clientY, force) {
+        pointer.x = clientX;
+        pointer.y = clientY;
+        pointer.active = true;
+
+        const now = performance.now();
+        if (now - state.lastWaveAt > 58) {
+          addWave(clientX, clientY, force);
+          state.lastWaveAt = now;
+        }
+      }
+
+      window.addEventListener('resize', resizeCanvas);
+      window.addEventListener('pointermove', event => handlePointerMove(event.clientX, event.clientY, 1));
+      window.addEventListener('pointerleave', () => { pointer.active = false; });
+      window.addEventListener('touchmove', event => {
+        const touch = event.touches[0];
+        if (!touch) return;
+        handlePointerMove(touch.clientX, touch.clientY, 1.1);
+      }, { passive: true });
+      window.addEventListener('touchend', () => { pointer.active = false; });
+
+      function animate(now) {
+        ctx.clearRect(0, 0, state.width, state.height);
+
+        const idleX = state.width * 0.5 + Math.cos(now * 0.00022) * state.width * 0.14;
+        const idleY = state.height * 0.46 + Math.sin(now * 0.00017) * state.height * 0.1;
+        const anchorX = pointer.active ? pointer.x : idleX;
+        const anchorY = pointer.active ? pointer.y : idleY;
+
+        state.waves = state.waves.filter(wave => wave.life < 1.18);
+
+        for (const wave of state.waves) {
+          wave.life += 0.018;
+          wave.radius += 6.4 + wave.power * 2.2;
+        }
+
+        for (const dot of state.dots) {
+          const dx = anchorX - dot.x;
+          const dy = anchorY - dot.y;
+          const distance = Math.hypot(dx, dy);
+          const cursorInfluence = Math.max(0, 1 - distance / 210);
+
+          let offsetX = 0;
+          let offsetY = 0;
+          let glow = cursorInfluence * 0.85;
+
+          if (cursorInfluence > 0) {
+            const angle = Math.atan2(dy, dx) + Math.PI * 0.5;
+            offsetX += Math.cos(angle) * cursorInfluence * 11 * dot.weight;
+            offsetY += Math.sin(angle) * cursorInfluence * 11 * dot.weight;
+          }
+
+          for (const wave of state.waves) {
+            const wx = dot.x - wave.x;
+            const wy = dot.y - wave.y;
+            const waveDistance = Math.hypot(wx, wy);
+            const band = Math.abs(waveDistance - wave.radius);
+
+            if (band < 50) {
+              const pulse = (1 - band / 50) * (1 - wave.life / 1.18) * wave.power;
+              const nx = waveDistance ? wx / waveDistance : 0;
+              const ny = waveDistance ? wy / waveDistance : 0;
+              const tangentX = -ny * wave.spin;
+              const tangentY = nx * wave.spin;
+
+              glow += pulse * 1.4;
+              offsetX += nx * pulse * 16 + tangentX * pulse * 5;
+              offsetY += ny * pulse * 16 + tangentY * pulse * 5;
+            }
+          }
+
+          const driftX = Math.sin(now * 0.0012 * dot.twinkle + dot.phase) * 0.9;
+          const driftY = Math.cos(now * 0.001 * dot.twinkle + dot.phase) * 0.9;
+          const drawX = dot.x + offsetX + driftX;
+          const drawY = dot.y + offsetY + driftY;
+          const radius = 0.7 + dot.weight * 0.45 + glow * 2.2;
+          const alpha = Math.min(0.95, 0.12 + glow * 0.48);
+
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(133, 82, 255, ${alpha})`;
+          ctx.arc(drawX, drawY, radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        state.rafId = requestAnimationFrame(animate);
+      }
+
+      resizeCanvas();
+
+      if (!reduceMotion) {
+        state.rafId = requestAnimationFrame(animate);
+      } else {
+        for (const dot of state.dots) {
+          ctx.beginPath();
+          ctx.fillStyle = 'rgba(133, 82, 255, 0.18)';
+          ctx.arc(dot.x, dot.y, 1.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
