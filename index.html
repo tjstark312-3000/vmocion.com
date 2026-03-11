@@ -23,320 +23,31 @@
 
     body {
       position: relative;
-      background:
-        radial-gradient(circle at 50% 36%, rgba(120, 56, 255, 0.18) 0%, rgba(120, 56, 255, 0.08) 15%, transparent 30%),
-        radial-gradient(circle at 50% 88%, rgba(42, 14, 92, 0.22) 0%, transparent 28%),
-        linear-gradient(180deg, #010105 0%, #04040b 100%);
+      background: linear-gradient(180deg, #010105 0%, #04040b 100%);
       color: var(--text);
       font-family: 'Barlow', sans-serif;
       overflow-x: hidden;
       min-height: 100vh;
     }
 
-    /* ── DOT GRID BACKGROUND ── */
-    .dot-grid {
+    .site-background {
       position: fixed;
       inset: 0;
       z-index: 0;
-      background-image: radial-gradient(circle, rgba(126, 72, 255, 0.7) 0 1.6px, transparent 1.8px);
-      background-size: 42px 42px;
-      opacity: 0.24;
+      background:
+        linear-gradient(180deg, rgba(2, 2, 8, 0.28) 0%, rgba(2, 2, 8, 0.54) 100%),
+        url('assets/vforce-background.svg') center center / cover no-repeat;
+      filter: brightness(0.68) saturate(1.08) contrast(1.05);
       pointer-events: none;
     }
 
-    .dot-grid::after {
+    .site-background::after {
       content: '';
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 56% 38% at 50% 43%, transparent 0%, rgba(1,1,5,0.14) 52%, rgba(1,1,5,0.92) 100%),
-        linear-gradient(180deg, rgba(1,1,5,0.1) 0%, rgba(1,1,5,0.82) 100%);
-    }
-
-    .pattern-clusters {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .particle-field {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      mix-blend-mode: screen;
-      opacity: 0.95;
-    }
-
-    .cluster {
-      --cluster-grid-size: 19px;
-      --cluster-dot-size: 3px;
-      --cluster-dot-alpha: 0.92;
-      --cluster-mobile-scale: 1;
-      --cluster-grid-pos-x: center;
-      --cluster-grid-pos-y: center;
-      --cluster-radius: 50%;
-      --cluster-before-opacity: 0.34;
-      --cluster-before-transform: translate(6%, -4%) rotate(7deg) scale(0.92);
-      --cluster-before-mask: radial-gradient(circle at 54% 48%,
-        transparent 0 18%,
-        #000 20% 29%,
-        transparent 33% 40%,
-        #000 44% 56%,
-        transparent 60% 68%,
-        #000 72% 86%,
-        transparent 90% 100%);
-      --cluster-mask: radial-gradient(circle at 50% 50%,
-        transparent 0 12%,
-        #000 13% 26%,
-        transparent 27% 34%,
-        #000 35% 48%,
-        transparent 49% 56%,
-        #000 57% 70%,
-        transparent 71% 78%,
-        #000 79% 92%,
-        transparent 93%);
-      position: absolute;
-      aspect-ratio: 1;
-      border-radius: var(--cluster-radius);
-      background-image:
-        radial-gradient(
-          circle,
-          rgba(127, 73, 255, var(--cluster-dot-alpha)) 0 calc(var(--cluster-dot-size) * var(--cluster-mobile-scale)),
-          transparent calc(var(--cluster-dot-size) * var(--cluster-mobile-scale) + 0.45px)
-        ),
-        radial-gradient(circle at 34% 36%, rgba(110, 46, 255, 0.2), transparent 62%);
-      background-size:
-        calc(var(--cluster-grid-size) * var(--cluster-mobile-scale)) calc(var(--cluster-grid-size) * var(--cluster-mobile-scale)),
-        100% 100%;
-      background-position: var(--cluster-grid-pos-x) var(--cluster-grid-pos-y), center;
-      opacity: 0.88;
-      filter: drop-shadow(0 0 24px rgba(110, 46, 255, 0.18));
-      overflow: hidden;
-      mask-image: var(--cluster-mask);
-      -webkit-mask-image: var(--cluster-mask);
-    }
-
-    .cluster::before,
-    .cluster::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    .cluster::before {
-      inset: -8%;
-      border-radius: inherit;
-      background-image: radial-gradient(
-        circle,
-        rgba(159, 109, 255, 0.9) 0 calc((var(--cluster-dot-size) - 0.45px) * var(--cluster-mobile-scale)),
-        transparent calc((var(--cluster-dot-size) - 0.45px) * var(--cluster-mobile-scale) + 0.55px)
-      );
-      background-size:
-        calc((var(--cluster-grid-size) - 2px) * var(--cluster-mobile-scale))
-        calc((var(--cluster-grid-size) + 1px) * var(--cluster-mobile-scale));
-      background-position: calc(var(--cluster-grid-pos-x) - 5px) calc(var(--cluster-grid-pos-y) + 4px);
-      opacity: var(--cluster-before-opacity);
-      transform: var(--cluster-before-transform);
-      filter: blur(0.3px);
-      mask-image: var(--cluster-before-mask);
-      -webkit-mask-image: var(--cluster-before-mask);
-    }
-
-    .cluster::after {
-      background:
-        radial-gradient(circle at 26% 32%, rgba(170, 126, 255, 0.18), transparent 24%),
-        radial-gradient(circle at 74% 63%, rgba(72, 18, 180, 0.3), transparent 32%),
-        radial-gradient(circle at 50% 50%, transparent 58%, rgba(5, 5, 12, 0.18) 100%);
-      opacity: 0.9;
-      mix-blend-mode: screen;
-    }
-
-    .cluster-tl {
-      --cluster-grid-size: 18px;
-      --cluster-dot-size: 3.1px;
-      --cluster-grid-pos-x: 4px;
-      --cluster-grid-pos-y: -2px;
-      --cluster-radius: 44% 56% 58% 42% / 47% 38% 62% 53%;
-      --cluster-before-opacity: 0.38;
-      --cluster-before-transform: translate(9%, -7%) rotate(-11deg) scale(0.88, 1.04);
-      --cluster-before-mask: radial-gradient(circle at 41% 46%,
-        transparent 0 16%,
-        #000 20% 30%,
-        transparent 34% 43%,
-        #000 47% 59%,
-        transparent 64% 73%,
-        #000 77% 89%,
-        transparent 93% 100%);
-      --cluster-mask: radial-gradient(circle at 45% 43%,
-        transparent 0 11%,
-        #000 13% 24%,
-        transparent 26% 31%,
-        #000 34% 47%,
-        transparent 50% 57%,
-        #000 61% 74%,
-        transparent 78% 100%);
-      top: -30px;
-      left: -42px;
-      width: min(30vw, 420px);
-      transform: rotate(-18deg) scale(1.08, 0.95);
-    }
-
-    .cluster-tc {
-      --cluster-grid-size: 17px;
-      --cluster-dot-size: 2.6px;
-      --cluster-grid-pos-x: -3px;
-      --cluster-grid-pos-y: 1px;
-      --cluster-radius: 47% 53% 40% 60% / 53% 44% 56% 47%;
-      --cluster-before-opacity: 0.3;
-      --cluster-before-transform: translate(-4%, 6%) rotate(15deg) scale(1.02, 0.82);
-      --cluster-before-mask: radial-gradient(circle at 57% 38%,
-        transparent 0 20%,
-        #000 23% 33%,
-        transparent 36% 45%,
-        #000 50% 61%,
-        transparent 66% 76%,
-        #000 81% 90%,
-        transparent 95% 100%);
-      --cluster-mask: radial-gradient(circle at 52% 41%,
-        transparent 0 15%,
-        #000 18% 29%,
-        transparent 31% 38%,
-        #000 41% 54%,
-        transparent 58% 66%,
-        #000 70% 84%,
-        transparent 88% 100%);
-      top: 12px;
-      left: 50%;
-      width: min(18vw, 240px);
-      transform: translateX(-50%) rotate(8deg) scale(0.94, 1.08);
-    }
-
-    .cluster-tr {
-      --cluster-grid-size: 20px;
-      --cluster-dot-size: 3.2px;
-      --cluster-grid-pos-x: -5px;
-      --cluster-grid-pos-y: 2px;
-      --cluster-radius: 57% 43% 52% 48% / 41% 55% 45% 59%;
-      --cluster-before-opacity: 0.36;
-      --cluster-before-transform: translate(-7%, 4%) rotate(10deg) scale(0.9, 1.08);
-      --cluster-before-mask: radial-gradient(circle at 59% 45%,
-        transparent 0 13%,
-        #000 17% 28%,
-        transparent 32% 39%,
-        #000 42% 54%,
-        transparent 58% 66%,
-        #000 71% 84%,
-        transparent 90% 100%);
-      --cluster-mask: radial-gradient(circle at 53% 47%,
-        transparent 0 9%,
-        #000 11% 23%,
-        transparent 26% 34%,
-        #000 37% 50%,
-        transparent 53% 59%,
-        #000 63% 77%,
-        transparent 81% 100%);
-      top: -18px;
-      right: -16px;
-      width: min(31vw, 430px);
-      transform: rotate(18deg) scale(0.97, 1.06);
-    }
-
-    .cluster-ml {
-      --cluster-grid-size: 18px;
-      --cluster-dot-size: 2.9px;
-      --cluster-grid-pos-x: 6px;
-      --cluster-grid-pos-y: 5px;
-      --cluster-radius: 52% 48% 60% 40% / 42% 58% 46% 54%;
-      --cluster-before-opacity: 0.4;
-      --cluster-before-transform: translate(4%, 8%) rotate(-14deg) scale(1.06, 0.9);
-      --cluster-before-mask: radial-gradient(circle at 39% 58%,
-        transparent 0 14%,
-        #000 18% 31%,
-        transparent 35% 42%,
-        #000 47% 58%,
-        transparent 63% 71%,
-        #000 76% 88%,
-        transparent 94% 100%);
-      --cluster-mask: radial-gradient(circle at 42% 55%,
-        transparent 0 12%,
-        #000 15% 27%,
-        transparent 30% 37%,
-        #000 40% 53%,
-        transparent 56% 64%,
-        #000 68% 83%,
-        transparent 87% 100%);
-      top: 56%;
-      left: 13%;
-      width: min(28vw, 360px);
-      transform: translate(-50%, -50%) rotate(-16deg) scale(1.12, 0.9);
-    }
-
-    .cluster-br {
-      --cluster-grid-size: 21px;
-      --cluster-dot-size: 3.25px;
-      --cluster-grid-pos-x: -3px;
-      --cluster-grid-pos-y: -5px;
-      --cluster-radius: 46% 54% 42% 58% / 57% 43% 61% 39%;
-      --cluster-before-opacity: 0.33;
-      --cluster-before-transform: translate(-6%, -5%) rotate(12deg) scale(0.94, 1.02);
-      --cluster-before-mask: radial-gradient(circle at 61% 46%,
-        transparent 0 12%,
-        #000 16% 26%,
-        transparent 30% 39%,
-        #000 44% 55%,
-        transparent 60% 69%,
-        #000 73% 86%,
-        transparent 92% 100%);
-      --cluster-mask: radial-gradient(circle at 56% 49%,
-        transparent 0 8%,
-        #000 10% 22%,
-        transparent 24% 30%,
-        #000 34% 46%,
-        transparent 49% 56%,
-        #000 59% 72%,
-        transparent 75% 82%,
-        #000 85% 96%,
-        transparent 100%);
-      right: -42px;
-      bottom: -34px;
-      width: min(35vw, 500px);
-      transform: rotate(20deg) scale(1.05, 0.93);
-    }
-
-    .cluster-bc {
-      --cluster-grid-size: 17px;
-      --cluster-dot-size: 2.75px;
-      --cluster-grid-pos-x: 2px;
-      --cluster-grid-pos-y: -1px;
-      --cluster-radius: 54% 46% 51% 49% / 45% 60% 40% 55%;
-      --cluster-before-opacity: 0.31;
-      --cluster-before-transform: translate(3%, -6%) rotate(-9deg) scale(0.96, 1.1);
-      --cluster-before-mask: radial-gradient(circle at 47% 56%,
-        transparent 0 18%,
-        #000 22% 32%,
-        transparent 36% 44%,
-        #000 49% 60%,
-        transparent 65% 74%,
-        #000 79% 90%,
-        transparent 95% 100%);
-      --cluster-mask: radial-gradient(circle at 49% 51%,
-        transparent 0 13%,
-        #000 16% 28%,
-        transparent 30% 35%,
-        #000 39% 51%,
-        transparent 54% 62%,
-        #000 66% 80%,
-        transparent 84% 100%);
-      left: 46%;
-      bottom: -80px;
-      width: min(23vw, 300px);
-      transform: translateX(-50%) rotate(12deg) scale(0.92, 1.08);
+        radial-gradient(ellipse 58% 40% at 50% 42%, transparent 0%, rgba(1, 1, 5, 0.12) 52%, rgba(1, 1, 5, 0.82) 100%),
+        linear-gradient(180deg, rgba(1, 1, 5, 0.08) 0%, rgba(1, 1, 5, 0.74) 100%);
     }
 
     /* ── NAV ── */
@@ -791,16 +502,6 @@
       nav { padding-top: 28px; }
       .nav-links { display: none; }
       .nav-logo { height: 42px; }
-      .cluster {
-        --cluster-mobile-scale: 0.78;
-        --cluster-dot-alpha: 0.86;
-      }
-      .cluster-tl,
-      .cluster-tr { width: 250px; }
-      .cluster-tc { width: 160px; top: 36px; }
-      .cluster-ml { width: 210px; left: 10%; top: 60%; }
-      .cluster-br { width: 280px; }
-      .cluster-bc { width: 190px; bottom: -36px; }
       .hero { padding: 132px 24px 110px; }
       .logo-svg { width: min(330px, 86vw); }
       .tagline {
@@ -823,16 +524,7 @@
 </head>
 <body>
 
-  <div class="dot-grid"></div>
-  <canvas class="particle-field" id="particleField" aria-hidden="true"></canvas>
-  <div class="pattern-clusters" aria-hidden="true">
-    <span class="cluster cluster-tl"></span>
-    <span class="cluster cluster-tc"></span>
-    <span class="cluster cluster-tr"></span>
-    <span class="cluster cluster-ml"></span>
-    <span class="cluster cluster-br"></span>
-    <span class="cluster cluster-bc"></span>
-  </div>
+  <div class="site-background" aria-hidden="true"></div>
 
   <!-- NAV -->
   <nav>
@@ -958,174 +650,6 @@
 
     // ESC to close
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-    (function initParticleField() {
-      const canvas = document.getElementById('particleField');
-      if (!canvas) return;
-
-      const ctx = canvas.getContext('2d');
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const pointer = {
-        x: window.innerWidth * 0.5,
-        y: window.innerHeight * 0.5,
-        active: false
-      };
-      const state = {
-        width: 0,
-        height: 0,
-        dpr: Math.min(window.devicePixelRatio || 1, 2),
-        spacing: 34,
-        dots: [],
-        waves: [],
-        rafId: 0,
-        lastWaveAt: 0
-      };
-
-      function buildDots() {
-        state.spacing = window.innerWidth < 768 ? 28 : 34;
-        state.dots = [];
-
-        for (let y = state.spacing * 0.5; y < state.height; y += state.spacing) {
-          for (let x = state.spacing * 0.5; x < state.width; x += state.spacing) {
-            state.dots.push({
-              x,
-              y,
-              phase: Math.random() * Math.PI * 2,
-              twinkle: 0.6 + Math.random() * 1.4,
-              weight: 0.35 + Math.random() * 0.85
-            });
-          }
-        }
-      }
-
-      function resizeCanvas() {
-        state.width = window.innerWidth;
-        state.height = window.innerHeight;
-        state.dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-        canvas.width = Math.round(state.width * state.dpr);
-        canvas.height = Math.round(state.height * state.dpr);
-        canvas.style.width = state.width + 'px';
-        canvas.style.height = state.height + 'px';
-
-        ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
-        buildDots();
-      }
-
-      function addWave(x, y, power) {
-        state.waves.push({
-          x,
-          y,
-          radius: 10,
-          life: 0,
-          power,
-          spin: Math.random() > 0.5 ? 1 : -1
-        });
-
-        if (state.waves.length > 9) state.waves.shift();
-      }
-
-      function handlePointerMove(clientX, clientY, force) {
-        pointer.x = clientX;
-        pointer.y = clientY;
-        pointer.active = true;
-
-        const now = performance.now();
-        if (now - state.lastWaveAt > 58) {
-          addWave(clientX, clientY, force);
-          state.lastWaveAt = now;
-        }
-      }
-
-      window.addEventListener('resize', resizeCanvas);
-      window.addEventListener('pointermove', event => handlePointerMove(event.clientX, event.clientY, 1));
-      window.addEventListener('pointerleave', () => { pointer.active = false; });
-      window.addEventListener('touchmove', event => {
-        const touch = event.touches[0];
-        if (!touch) return;
-        handlePointerMove(touch.clientX, touch.clientY, 1.1);
-      }, { passive: true });
-      window.addEventListener('touchend', () => { pointer.active = false; });
-
-      function animate(now) {
-        ctx.clearRect(0, 0, state.width, state.height);
-
-        const idleX = state.width * 0.5 + Math.cos(now * 0.00022) * state.width * 0.14;
-        const idleY = state.height * 0.46 + Math.sin(now * 0.00017) * state.height * 0.1;
-        const anchorX = pointer.active ? pointer.x : idleX;
-        const anchorY = pointer.active ? pointer.y : idleY;
-
-        state.waves = state.waves.filter(wave => wave.life < 1.18);
-
-        for (const wave of state.waves) {
-          wave.life += 0.018;
-          wave.radius += 6.4 + wave.power * 2.2;
-        }
-
-        for (const dot of state.dots) {
-          const dx = anchorX - dot.x;
-          const dy = anchorY - dot.y;
-          const distance = Math.hypot(dx, dy);
-          const cursorInfluence = Math.max(0, 1 - distance / 210);
-
-          let offsetX = 0;
-          let offsetY = 0;
-          let glow = cursorInfluence * 0.85;
-
-          if (cursorInfluence > 0) {
-            const angle = Math.atan2(dy, dx) + Math.PI * 0.5;
-            offsetX += Math.cos(angle) * cursorInfluence * 11 * dot.weight;
-            offsetY += Math.sin(angle) * cursorInfluence * 11 * dot.weight;
-          }
-
-          for (const wave of state.waves) {
-            const wx = dot.x - wave.x;
-            const wy = dot.y - wave.y;
-            const waveDistance = Math.hypot(wx, wy);
-            const band = Math.abs(waveDistance - wave.radius);
-
-            if (band < 50) {
-              const pulse = (1 - band / 50) * (1 - wave.life / 1.18) * wave.power;
-              const nx = waveDistance ? wx / waveDistance : 0;
-              const ny = waveDistance ? wy / waveDistance : 0;
-              const tangentX = -ny * wave.spin;
-              const tangentY = nx * wave.spin;
-
-              glow += pulse * 1.4;
-              offsetX += nx * pulse * 16 + tangentX * pulse * 5;
-              offsetY += ny * pulse * 16 + tangentY * pulse * 5;
-            }
-          }
-
-          const driftX = Math.sin(now * 0.0012 * dot.twinkle + dot.phase) * 0.9;
-          const driftY = Math.cos(now * 0.001 * dot.twinkle + dot.phase) * 0.9;
-          const drawX = dot.x + offsetX + driftX;
-          const drawY = dot.y + offsetY + driftY;
-          const radius = 0.7 + dot.weight * 0.45 + glow * 2.2;
-          const alpha = Math.min(0.95, 0.12 + glow * 0.48);
-
-          ctx.beginPath();
-          ctx.fillStyle = `rgba(133, 82, 255, ${alpha})`;
-          ctx.arc(drawX, drawY, radius, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
-        state.rafId = requestAnimationFrame(animate);
-      }
-
-      resizeCanvas();
-
-      if (!reduceMotion) {
-        state.rafId = requestAnimationFrame(animate);
-      } else {
-        for (const dot of state.dots) {
-          ctx.beginPath();
-          ctx.fillStyle = 'rgba(133, 82, 255, 0.18)';
-          ctx.arc(dot.x, dot.y, 1.2, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-    })();
   </script>
 </body>
 </html>
