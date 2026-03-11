@@ -73,79 +73,270 @@
     }
 
     .cluster {
+      --cluster-grid-size: 19px;
+      --cluster-dot-size: 3px;
+      --cluster-dot-alpha: 0.92;
+      --cluster-mobile-scale: 1;
+      --cluster-grid-pos-x: center;
+      --cluster-grid-pos-y: center;
+      --cluster-radius: 50%;
+      --cluster-before-opacity: 0.34;
+      --cluster-before-transform: translate(6%, -4%) rotate(7deg) scale(0.92);
+      --cluster-before-mask: radial-gradient(circle at 54% 48%,
+        transparent 0 18%,
+        #000 20% 29%,
+        transparent 33% 40%,
+        #000 44% 56%,
+        transparent 60% 68%,
+        #000 72% 86%,
+        transparent 90% 100%);
+      --cluster-mask: radial-gradient(circle at 50% 50%,
+        transparent 0 12%,
+        #000 13% 26%,
+        transparent 27% 34%,
+        #000 35% 48%,
+        transparent 49% 56%,
+        #000 57% 70%,
+        transparent 71% 78%,
+        #000 79% 92%,
+        transparent 93%);
       position: absolute;
       aspect-ratio: 1;
-      border-radius: 50%;
-      background-image: radial-gradient(circle, rgba(127, 73, 255, 0.92) 0 3px, transparent 3.35px);
-      background-size: 19px 19px;
-      background-position: center;
-      opacity: 0.9;
+      border-radius: var(--cluster-radius);
+      background-image:
+        radial-gradient(
+          circle,
+          rgba(127, 73, 255, var(--cluster-dot-alpha)) 0 calc(var(--cluster-dot-size) * var(--cluster-mobile-scale)),
+          transparent calc(var(--cluster-dot-size) * var(--cluster-mobile-scale) + 0.45px)
+        ),
+        radial-gradient(circle at 34% 36%, rgba(110, 46, 255, 0.2), transparent 62%);
+      background-size:
+        calc(var(--cluster-grid-size) * var(--cluster-mobile-scale)) calc(var(--cluster-grid-size) * var(--cluster-mobile-scale)),
+        100% 100%;
+      background-position: var(--cluster-grid-pos-x) var(--cluster-grid-pos-y), center;
+      opacity: 0.88;
       filter: drop-shadow(0 0 24px rgba(110, 46, 255, 0.18));
       overflow: hidden;
-      mask-image:
-        radial-gradient(circle at center,
-          transparent 0 12%,
-          #000 13% 26%,
-          transparent 27% 34%,
-          #000 35% 48%,
-          transparent 49% 56%,
-          #000 57% 70%,
-          transparent 71% 78%,
-          #000 79% 92%,
-          transparent 93%);
-      -webkit-mask-image:
-        radial-gradient(circle at center,
-          transparent 0 12%,
-          #000 13% 26%,
-          transparent 27% 34%,
-          #000 35% 48%,
-          transparent 49% 56%,
-          #000 57% 70%,
-          transparent 71% 78%,
-          #000 79% 92%,
-          transparent 93%);
+      mask-image: var(--cluster-mask);
+      -webkit-mask-image: var(--cluster-mask);
+    }
+
+    .cluster::before,
+    .cluster::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .cluster::before {
+      inset: -8%;
+      border-radius: inherit;
+      background-image: radial-gradient(
+        circle,
+        rgba(159, 109, 255, 0.9) 0 calc((var(--cluster-dot-size) - 0.45px) * var(--cluster-mobile-scale)),
+        transparent calc((var(--cluster-dot-size) - 0.45px) * var(--cluster-mobile-scale) + 0.55px)
+      );
+      background-size:
+        calc((var(--cluster-grid-size) - 2px) * var(--cluster-mobile-scale))
+        calc((var(--cluster-grid-size) + 1px) * var(--cluster-mobile-scale));
+      background-position: calc(var(--cluster-grid-pos-x) - 5px) calc(var(--cluster-grid-pos-y) + 4px);
+      opacity: var(--cluster-before-opacity);
+      transform: var(--cluster-before-transform);
+      filter: blur(0.3px);
+      mask-image: var(--cluster-before-mask);
+      -webkit-mask-image: var(--cluster-before-mask);
+    }
+
+    .cluster::after {
+      background:
+        radial-gradient(circle at 26% 32%, rgba(170, 126, 255, 0.18), transparent 24%),
+        radial-gradient(circle at 74% 63%, rgba(72, 18, 180, 0.3), transparent 32%),
+        radial-gradient(circle at 50% 50%, transparent 58%, rgba(5, 5, 12, 0.18) 100%);
+      opacity: 0.9;
+      mix-blend-mode: screen;
     }
 
     .cluster-tl {
+      --cluster-grid-size: 18px;
+      --cluster-dot-size: 3.1px;
+      --cluster-grid-pos-x: 4px;
+      --cluster-grid-pos-y: -2px;
+      --cluster-radius: 44% 56% 58% 42% / 47% 38% 62% 53%;
+      --cluster-before-opacity: 0.38;
+      --cluster-before-transform: translate(9%, -7%) rotate(-11deg) scale(0.88, 1.04);
+      --cluster-before-mask: radial-gradient(circle at 41% 46%,
+        transparent 0 16%,
+        #000 20% 30%,
+        transparent 34% 43%,
+        #000 47% 59%,
+        transparent 64% 73%,
+        #000 77% 89%,
+        transparent 93% 100%);
+      --cluster-mask: radial-gradient(circle at 45% 43%,
+        transparent 0 11%,
+        #000 13% 24%,
+        transparent 26% 31%,
+        #000 34% 47%,
+        transparent 50% 57%,
+        #000 61% 74%,
+        transparent 78% 100%);
       top: -30px;
       left: -42px;
       width: min(30vw, 420px);
-      transform: rotate(-18deg);
+      transform: rotate(-18deg) scale(1.08, 0.95);
     }
 
     .cluster-tc {
+      --cluster-grid-size: 17px;
+      --cluster-dot-size: 2.6px;
+      --cluster-grid-pos-x: -3px;
+      --cluster-grid-pos-y: 1px;
+      --cluster-radius: 47% 53% 40% 60% / 53% 44% 56% 47%;
+      --cluster-before-opacity: 0.3;
+      --cluster-before-transform: translate(-4%, 6%) rotate(15deg) scale(1.02, 0.82);
+      --cluster-before-mask: radial-gradient(circle at 57% 38%,
+        transparent 0 20%,
+        #000 23% 33%,
+        transparent 36% 45%,
+        #000 50% 61%,
+        transparent 66% 76%,
+        #000 81% 90%,
+        transparent 95% 100%);
+      --cluster-mask: radial-gradient(circle at 52% 41%,
+        transparent 0 15%,
+        #000 18% 29%,
+        transparent 31% 38%,
+        #000 41% 54%,
+        transparent 58% 66%,
+        #000 70% 84%,
+        transparent 88% 100%);
       top: 12px;
       left: 50%;
       width: min(18vw, 240px);
-      transform: translateX(-50%) rotate(8deg);
+      transform: translateX(-50%) rotate(8deg) scale(0.94, 1.08);
     }
 
     .cluster-tr {
+      --cluster-grid-size: 20px;
+      --cluster-dot-size: 3.2px;
+      --cluster-grid-pos-x: -5px;
+      --cluster-grid-pos-y: 2px;
+      --cluster-radius: 57% 43% 52% 48% / 41% 55% 45% 59%;
+      --cluster-before-opacity: 0.36;
+      --cluster-before-transform: translate(-7%, 4%) rotate(10deg) scale(0.9, 1.08);
+      --cluster-before-mask: radial-gradient(circle at 59% 45%,
+        transparent 0 13%,
+        #000 17% 28%,
+        transparent 32% 39%,
+        #000 42% 54%,
+        transparent 58% 66%,
+        #000 71% 84%,
+        transparent 90% 100%);
+      --cluster-mask: radial-gradient(circle at 53% 47%,
+        transparent 0 9%,
+        #000 11% 23%,
+        transparent 26% 34%,
+        #000 37% 50%,
+        transparent 53% 59%,
+        #000 63% 77%,
+        transparent 81% 100%);
       top: -18px;
       right: -16px;
       width: min(31vw, 430px);
-      transform: rotate(18deg);
+      transform: rotate(18deg) scale(0.97, 1.06);
     }
 
     .cluster-ml {
+      --cluster-grid-size: 18px;
+      --cluster-dot-size: 2.9px;
+      --cluster-grid-pos-x: 6px;
+      --cluster-grid-pos-y: 5px;
+      --cluster-radius: 52% 48% 60% 40% / 42% 58% 46% 54%;
+      --cluster-before-opacity: 0.4;
+      --cluster-before-transform: translate(4%, 8%) rotate(-14deg) scale(1.06, 0.9);
+      --cluster-before-mask: radial-gradient(circle at 39% 58%,
+        transparent 0 14%,
+        #000 18% 31%,
+        transparent 35% 42%,
+        #000 47% 58%,
+        transparent 63% 71%,
+        #000 76% 88%,
+        transparent 94% 100%);
+      --cluster-mask: radial-gradient(circle at 42% 55%,
+        transparent 0 12%,
+        #000 15% 27%,
+        transparent 30% 37%,
+        #000 40% 53%,
+        transparent 56% 64%,
+        #000 68% 83%,
+        transparent 87% 100%);
       top: 56%;
       left: 13%;
       width: min(28vw, 360px);
-      transform: translate(-50%, -50%) rotate(-16deg);
+      transform: translate(-50%, -50%) rotate(-16deg) scale(1.12, 0.9);
     }
 
     .cluster-br {
+      --cluster-grid-size: 21px;
+      --cluster-dot-size: 3.25px;
+      --cluster-grid-pos-x: -3px;
+      --cluster-grid-pos-y: -5px;
+      --cluster-radius: 46% 54% 42% 58% / 57% 43% 61% 39%;
+      --cluster-before-opacity: 0.33;
+      --cluster-before-transform: translate(-6%, -5%) rotate(12deg) scale(0.94, 1.02);
+      --cluster-before-mask: radial-gradient(circle at 61% 46%,
+        transparent 0 12%,
+        #000 16% 26%,
+        transparent 30% 39%,
+        #000 44% 55%,
+        transparent 60% 69%,
+        #000 73% 86%,
+        transparent 92% 100%);
+      --cluster-mask: radial-gradient(circle at 56% 49%,
+        transparent 0 8%,
+        #000 10% 22%,
+        transparent 24% 30%,
+        #000 34% 46%,
+        transparent 49% 56%,
+        #000 59% 72%,
+        transparent 75% 82%,
+        #000 85% 96%,
+        transparent 100%);
       right: -42px;
       bottom: -34px;
       width: min(35vw, 500px);
-      transform: rotate(20deg);
+      transform: rotate(20deg) scale(1.05, 0.93);
     }
 
     .cluster-bc {
+      --cluster-grid-size: 17px;
+      --cluster-dot-size: 2.75px;
+      --cluster-grid-pos-x: 2px;
+      --cluster-grid-pos-y: -1px;
+      --cluster-radius: 54% 46% 51% 49% / 45% 60% 40% 55%;
+      --cluster-before-opacity: 0.31;
+      --cluster-before-transform: translate(3%, -6%) rotate(-9deg) scale(0.96, 1.1);
+      --cluster-before-mask: radial-gradient(circle at 47% 56%,
+        transparent 0 18%,
+        #000 22% 32%,
+        transparent 36% 44%,
+        #000 49% 60%,
+        transparent 65% 74%,
+        #000 79% 90%,
+        transparent 95% 100%);
+      --cluster-mask: radial-gradient(circle at 49% 51%,
+        transparent 0 13%,
+        #000 16% 28%,
+        transparent 30% 35%,
+        #000 39% 51%,
+        transparent 54% 62%,
+        #000 66% 80%,
+        transparent 84% 100%);
       left: 46%;
       bottom: -80px;
       width: min(23vw, 300px);
-      transform: translateX(-50%) rotate(12deg);
+      transform: translateX(-50%) rotate(12deg) scale(0.92, 1.08);
     }
 
     /* ── NAV ── */
@@ -601,8 +792,8 @@
       .nav-links { display: none; }
       .nav-logo { height: 42px; }
       .cluster {
-        background-size: 15px 15px;
-        background-image: radial-gradient(circle, rgba(127, 73, 255, 0.86) 0 2.3px, transparent 2.6px);
+        --cluster-mobile-scale: 0.78;
+        --cluster-dot-alpha: 0.86;
       }
       .cluster-tl,
       .cluster-tr { width: 250px; }
