@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VFORCE Waitlist | Reserve Priority Access</title>
+  <meta
+    name="description"
+    content="Reserve your VFORCE waitlist priority position. Paid reservation amounts are credited toward your final purchase price."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="icon" type="image/png" href="assets/vforce-logo-vm.png" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&family=Orbitron:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="assets/site.css" />
+</head>
+<body>
+  <div class="site-background" aria-hidden="true"></div>
+  <canvas class="particle-field" id="particleField" aria-hidden="true"></canvas>
+
+  <div class="page">
+    <nav class="site-nav" aria-label="Primary">
+      <a class="nav-logo" href="/" aria-label="VFORCE home">
+        <img src="assets/vforce-logo-vm.png" alt="VFORCE logo" />
+      </a>
+      <a class="nav-link" href="/">Back Home</a>
+    </nav>
+
+    <main class="page-shell">
+      <div class="waitlist-layout">
+        <section class="waitlist-copy-card" aria-labelledby="waitlist-title">
+          <div class="eyebrow">Priority Reservations Open</div>
+          <h1 class="section-title" id="waitlist-title">Secure Your <span>VFORCE</span> Position</h1>
+          <p class="section-copy">
+            Choose a paid priority tier to move ahead in line or join for free behind the paid reservation list.
+            Every paid reservation is applied toward your final VFORCE purchase price when your unit is ready.
+          </p>
+
+          <div class="detail-list" aria-label="Reservation details">
+            <div class="detail-item">
+              <strong>$100 Priority Reservation</strong>
+              <span>Places you within the first 10,000 units released.</span>
+            </div>
+            <div class="detail-item">
+              <strong>$75 Priority Reservation</strong>
+              <span>Places you within the first 100,000 units released.</span>
+            </div>
+            <div class="detail-item">
+              <strong>$50 Priority Reservation</strong>
+              <span>Places you within the first 1,000,000 units released.</span>
+            </div>
+            <div class="detail-item">
+              <strong>Free Waitlist</strong>
+              <span>Join without payment and remain behind all paid reservation tiers.</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="waitlist-panel" id="formPanel" aria-labelledby="reservation-form-title">
+          <h2 class="panel-title" id="reservation-form-title">Choose Your Reservation</h2>
+          <p class="panel-copy">
+            Complete the form below. Paid selections continue to a Stripe-hosted checkout and free signups are saved immediately.
+          </p>
+
+          <form class="form-grid" id="waitlistForm" novalidate>
+            <div class="field">
+              <label for="nameInput">Full Name</label>
+              <input class="text-input" id="nameInput" name="name" type="text" autocomplete="name" placeholder="Enter your name" required />
+            </div>
+
+            <div class="field">
+              <label for="emailInput">Email Address</label>
+              <input
+                class="text-input"
+                id="emailInput"
+                name="email"
+                type="email"
+                autocomplete="email"
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+
+            <div class="field honeypot" aria-hidden="true">
+              <label for="companyInput">Company</label>
+              <input id="companyInput" name="company" type="text" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <fieldset class="field">
+              <legend class="fieldset-label">Waitlist Position</legend>
+              <div class="tier-grid">
+                <label class="tier-option" data-tier-option="priority_10000">
+                  <input type="radio" name="waitlistTier" value="priority_10000" />
+                  <span class="tier-card">
+                    <span class="tier-header">
+                      <span>
+                        <span class="tier-title">First 10,000 Units</span>
+                        <span class="tier-tag">Paid Priority</span>
+                      </span>
+                      <span class="tier-price">$100</span>
+                    </span>
+                    <span class="tier-copy">Your reservation amount is deducted from your VFORCE purchase price.</span>
+                    <span class="tier-meta">
+                      <span class="tier-availability" data-tier-availability="priority_10000">Checking availability...</span>
+                      <span class="sold-out-pill">Sold Out</span>
+                    </span>
+                  </span>
+                </label>
+
+                <label class="tier-option" data-tier-option="priority_100000">
+                  <input type="radio" name="waitlistTier" value="priority_100000" />
+                  <span class="tier-card">
+                    <span class="tier-header">
+                      <span>
+                        <span class="tier-title">First 100,000 Units</span>
+                        <span class="tier-tag">Paid Priority</span>
+                      </span>
+                      <span class="tier-price">$75</span>
+                    </span>
+                    <span class="tier-copy">Reserve a stronger queue position and credit the payment toward final purchase.</span>
+                    <span class="tier-meta">
+                      <span class="tier-availability" data-tier-availability="priority_100000">Checking availability...</span>
+                      <span class="sold-out-pill">Sold Out</span>
+                    </span>
+                  </span>
+                </label>
+
+                <label class="tier-option" data-tier-option="priority_1000000">
+                  <input type="radio" name="waitlistTier" value="priority_1000000" />
+                  <span class="tier-card">
+                    <span class="tier-header">
+                      <span>
+                        <span class="tier-title">First 1,000,000 Units</span>
+                        <span class="tier-tag">Paid Priority</span>
+                      </span>
+                      <span class="tier-price">$50</span>
+                    </span>
+                    <span class="tier-copy">Join the paid priority queue at the broadest early-access tier.</span>
+                    <span class="tier-meta">
+                      <span class="tier-availability" data-tier-availability="priority_1000000">Checking availability...</span>
+                      <span class="sold-out-pill">Sold Out</span>
+                    </span>
+                  </span>
+                </label>
+
+                <label class="tier-option" data-tier-option="free">
+                  <input type="radio" name="waitlistTier" value="free" />
+                  <span class="tier-card">
+                    <span class="tier-header">
+                      <span>
+                        <span class="tier-title">Free Waitlist</span>
+                        <span class="tier-tag">No Payment</span>
+                      </span>
+                      <span class="tier-price">$0</span>
+                    </span>
+                    <span class="tier-copy">Save your contact info now and join behind all paid reservation holders.</span>
+                    <span class="tier-meta">
+                      <span class="tier-availability" data-tier-availability="free">Always available</span>
+                    </span>
+                  </span>
+                </label>
+              </div>
+            </fieldset>
+
+            <p class="fine-print">
+              Paid reservations complete on Stripe. Use the same email you want tied to your VFORCE order.
+            </p>
+            <p class="fine-print">
+              Any amount paid for priority access is credited toward your final purchase price at checkout.
+            </p>
+
+            <div class="status-message" id="statusMessage" aria-live="polite"></div>
+            <button class="submit-btn" id="submitButton" type="submit">Choose Your Reservation</button>
+          </form>
+        </section>
+
+        <section class="success-panel" id="successPanel" hidden aria-live="polite">
+          <div class="success-mark">OK</div>
+          <h2>You Are <span>On The List</span></h2>
+          <p>
+            Your free VFORCE waitlist signup has been saved. We will reach out with launch timing and early access updates.
+          </p>
+          <button class="button-secondary" id="resetButton" type="button">Add Another Reservation</button>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">© 2026 VMOCION, LLC. All rights reserved.</footer>
+  </div>
+
+  <script src="assets/particle-field.js" defer></script>
+  <script src="assets/waitlist.js" defer></script>
+</body>
+</html>
